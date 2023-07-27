@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="singleLocation"
+            type="com.cjrodriguez.weatherforecast.model.Location" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="@{singleLocation.country}"
+            android:id="@+id/location_country"
+            android:layout_width="fill_parent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:text="@{singleLocation.name}"
+            android:id="@+id/location_name"
+            android:layout_width="fill_parent"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </LinearLayout>
+</layout>

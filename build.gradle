@@ -1,0 +1,15 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.7.1'
+    }
+}
+
+plugins {
+    id 'com.android.application' version '8.0.0-beta02' apply false
+    id 'com.android.library' version '8.0.0-beta02' apply false
+}

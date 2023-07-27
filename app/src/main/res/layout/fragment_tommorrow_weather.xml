@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="tomorrowWeather"
+            type="com.cjrodriguez.weatherforecast.model.UpdatedWeatherData" />
+
+        <variable
+            name="tomorrowDay"
+            type="com.cjrodriguez.weatherforecast.model.Day" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.TodayWeatherFragment">
+
+        <TextView
+            android:id="@+id/date_time"
+            android:layout_width="match_parent"
+            android:text="@{tomorrowWeather.current.last_updated}"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="textStart"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="19th July" />
+
+        <TextView
+            android:id="@+id/day_night"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="textStart"
+            app:forecastDay="@{tomorrowDay}"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date_time"
+            tools:text="Day 18- Night" />
+
+        <TextView
+            android:id="@+id/temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="viewStart"
+            app:double="@{tomorrowWeather.current.temp_c}"
+            android:textSize="60sp"
+            tools:text="12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/day_night" />
+
+        <TextView
+            android:id="@+id/degree_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/o"
+            android:textAlignment="textStart"
+            android:textSize="30sp"
+            app:layout_constraintStart_toEndOf="@id/temp"
+            app:layout_constraintTop_toBottomOf="@id/day_night" />
+
+        <TextView
+            android:id="@+id/degree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAlignment="textStart"
+            android:textSize="50sp"
+            app:layout_constraintStart_toEndOf="@id/degree_circle"
+            app:layout_constraintTop_toBottomOf="@id/day_night" />
+
+        <ImageView
+            android:id="@+id/weather_icon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="16dp"
+            android:scaleType="centerCrop"
+            app:image="@{tomorrowWeather.current.condition.icon}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/day_night" />
+
+        <TextView
+            android:id="@+id/feels_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:textAlignment="textStart"
+            android:visibility="invisible"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/temp"
+            android:text="Feels Like" />
+
+        <TextView
+            android:id="@+id/feels_like_cel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="8dp"
+            android:visibility="invisible"
+            android:textAlignment="textStart"
+            app:double="@{tomorrowWeather.current.feelslike_c}"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/feels_like"
+            app:layout_constraintTop_toBottomOf="@id/temp"
+            tools:text="12" />
+
+        <TextView
+            android:id="@+id/weather_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:layout_marginEnd="16dp"
+            android:text="@{tomorrowWeather.current.condition.text}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/feels_like"
+            app:layout_constraintTop_toTopOf="@+id/feels_like"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Partly Cloudy" />
+
+        <HorizontalScrollView
+            android:id="@+id/chart_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="1dp"
+            android:fillViewport="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/chance_linear">
+
+
+
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:textSize="100sp"-->
+            <!--                android:textAlignment="center"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:text="hello world"/>-->
+
+
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/line_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/chance_linear"
+            android:layout_width="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/transparent_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="horizontal"
+            android:layout_height="40dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_height="30dp"
+                android:src="@drawable/umbrella"
+                app:tint="@color/mtrl_filled_stroke_color" />
+
+            <TextView
+                android:id="@+id/chance_rain"
+                app:chance="@{tomorrowDay.daily_chance_of_rain}"
+                android:layout_width="wrap_content"
+                android:textColor="@color/mtrl_filled_stroke_color"
+                tools:text="chance of rain"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

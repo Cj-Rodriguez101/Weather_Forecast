@@ -1,0 +1,45 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt"
+    android:viewportWidth="64"
+    android:viewportHeight="64"
+    android:width="32dp"
+    android:height="32dp">
+    <path
+        android:pathData="M34.5 16Q43 16 47 20.5Q50.7 23.9 50 30L54 32.5L55 40.5L53 45L49.5 47L13.5 47Q7.9 45.1 9 36.5L11.5 33L14 31.5L18.5 25L25 24L29.5 18L34.5 16ZM35 17L29 20L27 23L25 25L20 26L15 32Q16 34 14 33L10 38L11 44L15 46L49 46L51 45L54 41L54 36L49 30L47 23Q44 17 35 17Z"
+        android:fillColor="#D0D1D2"
+        android:fillAlpha="0.827451"
+        android:strokeColor="#D0D1D2"
+        android:strokeAlpha="0.827451"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M34.5 20Q43.1 18.9 45 24.5L46 32L51 35.5Q52.3 41.8 48.5 43L46.5 44L16.5 44L13 41.5Q12 36 15.5 35L18 33.5Q17.5 28.5 21.5 28L24.5 27L26.5 28L30.5 22L34.5 20Z"
+        android:fillColor="#FEFEFE"
+        android:fillAlpha="0.9921569"
+        android:strokeColor="#FEFEFE"
+        android:strokeAlpha="0.9921569"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M27.5 26L26.5 28L25 27.5L27.5 26Z"
+        android:fillColor="#ECEDED"
+        android:strokeColor="#ECEDED"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M20.5 28L18.5 31L20.5 28Z"
+        android:fillColor="#ECEDED"
+        android:strokeColor="#ECEDED"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M49.5 33L50.5 35L49.5 33Z"
+        android:fillColor="#ECEDED"
+        android:strokeColor="#ECEDED"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M14.5 35L13.5 37L14.5 35Z"
+        android:fillColor="#ECEDED"
+        android:strokeColor="#ECEDED"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M34.5 17Q43.7 16.8 47 22.5L49 29.5L54 35.5L54 40.5L50.5 45L48.5 46L14.5 46L11 43.5L10 37.5L13.5 33Q15.8 33.8 15 31.5L19.5 26L24.5 25L27 22.5L28.5 20L34.5 17ZM34 20L32 21L28 26L27 27L21 28L17 33Q18 36 15 35L12 39L16 44L48 44L50 43L52 39L51 35L46 32L47 30L44 22L41 20L34 20Z"
+        android:fillColor="#DADBDC"
+        android:strokeColor="#DADBDC"
+        android:strokeWidth="1" />
+</vector>

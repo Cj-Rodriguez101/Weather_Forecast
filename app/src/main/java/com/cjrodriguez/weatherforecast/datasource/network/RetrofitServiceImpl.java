@@ -26,7 +26,8 @@ public class RetrofitServiceImpl {
                     .writeTimeout(0, TimeUnit.SECONDS)
                     .readTimeout(0, TimeUnit.SECONDS)
                     .addInterceptor(chain -> {
-                        Request request = chain.request().newBuilder().addHeader(KEY, BuildConfig.API_KEY).build();
+                        Request request = chain.request().newBuilder()
+                                .addHeader(KEY, BuildConfig.API_KEY).build();
                         return chain.proceed(request);
                     })
                     .build();

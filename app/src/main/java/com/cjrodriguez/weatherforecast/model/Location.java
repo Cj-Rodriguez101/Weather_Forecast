@@ -3,6 +3,7 @@ package com.cjrodriguez.weatherforecast.model;
 import static com.cjrodriguez.weatherforecast.util.Constants.CURRENT_LOCATION_STRING;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "locationTable")
@@ -78,5 +79,19 @@ public class Location {
     }
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", region='" + region + '\'' +
+                ", country='" + country + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", localtime_epoch=" + localtime_epoch +
+                ", url='" + url + '\'' +
+                '}';
     }
 }

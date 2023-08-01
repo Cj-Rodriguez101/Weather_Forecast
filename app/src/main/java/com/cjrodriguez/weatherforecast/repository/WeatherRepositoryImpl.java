@@ -1,6 +1,7 @@
 package com.cjrodriguez.weatherforecast.repository;
 
 import static com.cjrodriguez.weatherforecast.util.Constants.NO;
+import static com.cjrodriguez.weatherforecast.util.Constants.WEATHER_TAG;
 
 import android.util.Log;
 
@@ -30,9 +31,7 @@ public class WeatherRepositoryImpl implements WeatherRepository {
 
     @Override
     public Single<List<Location>> getSearchLocations(String query) {
-        return retrofitService.searchLocations(
-                //BuildConfig.API_KEY,
-                query);
+        return retrofitService.searchLocations(query);
     }
 
     @Override
@@ -51,7 +50,6 @@ public class WeatherRepositoryImpl implements WeatherRepository {
 
         return retrofitService
                 .getWeatherDataForecast(
-                        //BuildConfig.API_KEY,
                         query,
                         NO, 3, NO).doOnSuccess((weatherData -> {
                           if(weatherData.getForecast().getForecastday().size()>0){
@@ -60,7 +58,7 @@ public class WeatherRepositoryImpl implements WeatherRepository {
                                       weatherData.getCurrent(), List.of(weatherData.getForecast()));
                           }
                 } )).doOnError((er->{
-                    Log.e("er", er.getMessage());
+                    Log.e(WEATHER_TAG, er.getMessage());
                 }));
     }
 

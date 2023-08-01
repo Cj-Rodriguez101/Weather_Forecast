@@ -47,7 +47,7 @@ public abstract class WeatherDao {
     @Transaction
     public WeatherData getCurrentWeatherData(String query){
         Location location = getLocationData(query);
-        Current current = this.getCurrentSingleData();
+        Current current = getCurrentSingleData();
         List<Forecast> forecasts = getForecastData();
         return new WeatherData(location, current, forecasts.get(0));
     }

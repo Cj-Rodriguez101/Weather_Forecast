@@ -13,5 +13,6 @@ public class Constants {
     public static final String WEATHER_TAG = "WeatherApp";
     public static final String WEATHER_DB = "Weather.db";
     public static final String NO = "no";
+    public static final String TEST_CITY = "Dublin";
     public static final int WEATHER_REQUEST_CODE = 89839;
 }

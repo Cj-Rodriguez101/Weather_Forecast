@@ -7,6 +7,7 @@ import static com.cjrodriguez.weatherforecast.util.Constants.TRANSFER_CITY;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -50,7 +51,7 @@ public class SearchActivity extends AppCompatActivity implements Contract.View {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
         ((BaseApplication) getApplicationContext()).appComponent.inject(this);
         View decorView = getWindow().getDecorView();
         Window window = getWindow();

@@ -8,6 +8,7 @@ import static com.cjrodriguez.weatherforecast.util.Constants.WEATHER_TAG;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
         ((BaseApplication) getApplicationContext()).appComponent.inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         presenter = new MainActivityPresenter(this,
@@ -125,8 +126,6 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
             intent.putExtra(CURRENT_COUNTRY, cityName);
             startActivity(intent);
         });
-
-        //binding.fragContainer.setUserInputEnabled(false);
     }
 
     private boolean checkIfLocationPermissionGranted() {
@@ -170,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
                         }
                     } catch (IOException e) {
                         Log.e(WEATHER_TAG, e.getMessage());
-                        //throw new RuntimeException(e);
                     }
                 }
             }

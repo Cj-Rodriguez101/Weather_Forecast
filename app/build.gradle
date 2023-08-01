@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'com.cjrodriguez.weatherforecast'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         Properties properties = new Properties()
@@ -13,7 +13,7 @@ android {
         buildConfigField "String", "API_KEY", "\"${properties.getProperty('API_KEY')}\""
         applicationId "com.cjrodriguez.weatherforecast"
         minSdk 23
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -80,8 +80,7 @@ dependencies {
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
 
     testImplementation 'junit:junit:4.13.2'
+    testImplementation "org.mockito:mockito-core:5.4.0"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
 }

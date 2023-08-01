@@ -1,5 +1,5 @@
 # Weather_Forecast
-A Weather Forecast Using RxJava, MVP and Dagger Using [WeatherApi](https://www.weatherapi.com)
+A Weather Forecast App Using RxJava, MVP and Dagger Using [WeatherApi](https://www.weatherapi.com)
 
 ## Features
 * Retrieve Current Location
@@ -12,7 +12,7 @@ A Weather Forecast Using RxJava, MVP and Dagger Using [WeatherApi](https://www.w
 * XML
 * Room
 * SearchActivity
-* ListView
+* ListView 
 * ViewPager2 & TabLayout
 * RxJava & RxAndroid
 * Datastore
@@ -21,6 +21,9 @@ A Weather Forecast Using RxJava, MVP and Dagger Using [WeatherApi](https://www.w
 * Dagger
 * Retrofit (Inteceptor)
 * Gson
+
+## Credit
+Design Inspiration From Google Weather App
 
 ## Instructions
 * Create free account on the [WeatherApi](https://www.weatherapi.com)

@@ -1,8 +1,5 @@
 package com.cjrodriguez.weatherforecast.mvp.presenters;
 
-import android.util.Log;
-
-import com.cjrodriguez.weatherforecast.LocationSearchListAdapter;
 import com.cjrodriguez.weatherforecast.model.Location;
 import com.cjrodriguez.weatherforecast.mvp.Contract;
 
@@ -29,23 +26,25 @@ public class SearchActivityPresenter implements Contract.Presenter {
     @Override
     public void searchLocation(String query) {
         mainView.showProgress();
-        //model.searchLocation(mainView.getSearchLocation());
         compositeDisposable.add(model.searchLocation(query).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<Location>>() {
 
                     @Override
                     public void onSuccess(@NonNull List<Location> locations) {
-                            //arrayAdapter = new ArrayAdapter<Location>(getApplicationContext(), R.layout.list_item, locations);
+
+                        mainView.hideErrorLayout();
                         mainView.setSearchLocationList(locations);
+                        mainView.hideProgress();
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         mainView.setSearchLocationList(List.of(new Location(mainView.getDefaultLocation())));
+                        mainView.hideProgress();
+                        mainView.showErrorLayout("Make Sure Internet Is Connected");
                     }
                 }));
-        mainView.hideProgress();
     }
 
     @Override
@@ -53,15 +52,10 @@ public class SearchActivityPresenter implements Contract.Presenter {
         model.writeSelectedCountry(country);
     }
 
-    //    @Override
-//    public void setCurrentDefaultLocation(String query) {
-//        mainView.setDefaultLocation(query);
-//    }
-
-//    @Override
-//    public void onDestroy() {
-//        mainView = null;
-//    }
+    @Override
+    public String readLocationCountry() {
+        return model.readLocationCountry();
+    }
 
     @Override
     public void unsubscribe() {

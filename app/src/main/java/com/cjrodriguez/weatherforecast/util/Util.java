@@ -1,27 +1,23 @@
 package com.cjrodriguez.weatherforecast.util;
 
-import android.graphics.drawable.Drawable;
-
-import androidx.annotation.DrawableRes;
-
 import com.cjrodriguez.weatherforecast.R;
 import com.cjrodriguez.weatherforecast.model.Current;
 import com.cjrodriguez.weatherforecast.model.Forecast;
 import com.cjrodriguez.weatherforecast.model.Forecastday;
 import com.cjrodriguez.weatherforecast.model.Location;
-import com.cjrodriguez.weatherforecast.model.UpdatedWeatherData;
+import com.cjrodriguez.weatherforecast.model.WeatherData;
 
 import java.util.List;
 import java.util.Objects;
 
 public class Util {
 
-    public UpdatedWeatherData getCurrentWeatherFromForecast(Forecastday forecastday, Location location){
-        return new UpdatedWeatherData(location, new Current(forecastday.getDate_epoch(),
+    public WeatherData getCurrentWeatherFromForecast(Forecastday forecastday, Location location){
+        return new WeatherData(location, new Current(forecastday.getDate_epoch(),
                 forecastday.getDate(), forecastday.getDay().getAvgtemp_c(),
                 1, forecastday.getDay().getCondition(), forecastday.getDay().getMaxwind_kph(),
-                120, "", 0.0, 0.0, 12, 12,
-                12.0, 12.0, 12.0, 12.0,12.0
+                120, "", 0.0, 0.0, (int) Math.round(forecastday.getDay().getAvghumidity()), 12,
+                12.0, 12.0, 12.0, forecastday.getDay().getUv(),12.0
                 ), new Forecast(0, List.of(forecastday)));
     }
 

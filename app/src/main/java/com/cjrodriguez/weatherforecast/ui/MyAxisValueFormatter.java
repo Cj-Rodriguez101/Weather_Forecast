@@ -1,7 +1,5 @@
-package com.cjrodriguez.weatherforecast.util;
+package com.cjrodriguez.weatherforecast.ui;
 
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 public class MyAxisValueFormatter extends ValueFormatter {

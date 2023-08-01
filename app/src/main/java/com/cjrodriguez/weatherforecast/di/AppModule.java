@@ -1,5 +1,7 @@
 package com.cjrodriguez.weatherforecast.di;
 
+import static com.cjrodriguez.weatherforecast.util.Constants.WEATHER_DB;
+
 import android.content.Context;
 
 import androidx.room.Room;
@@ -27,12 +29,6 @@ public class AppModule {
         this.application = app;
     }
 
-//    private final Context context;
-//
-//    public AppModule(Context context) {
-//        this.context = context;
-//    }
-
     @Provides
     @Singleton
     Context providesApplicationContext() {
@@ -49,7 +45,7 @@ public class AppModule {
     @Singleton
     WeatherDatabase providesWeatherDatabase(Context context){
         return Room.databaseBuilder(
-                context, WeatherDatabase.class, "Weather.db"
+                context, WeatherDatabase.class, WEATHER_DB
         ).fallbackToDestructiveMigration().build();
     }
 
@@ -68,7 +64,8 @@ public class AppModule {
     @Provides
     @Singleton
     WeatherRepository providesWeatherRepository(RetrofitService retrofitService,
-                                                WeatherDao weatherDao, SettingsDatastore settingsDatastore){
+                                                WeatherDao weatherDao,
+                                                SettingsDatastore settingsDatastore){
         return new WeatherRepositoryImpl(retrofitService, weatherDao,settingsDatastore);
     }
 }

@@ -10,12 +10,11 @@ import com.cjrodriguez.weatherforecast.model.Current;
 import com.cjrodriguez.weatherforecast.model.Forecast;
 import com.cjrodriguez.weatherforecast.model.Forecastday;
 import com.cjrodriguez.weatherforecast.model.Location;
-import com.cjrodriguez.weatherforecast.model.UpdatedWeatherData;
+import com.cjrodriguez.weatherforecast.model.WeatherData;
 import com.cjrodriguez.weatherforecast.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.rxjava3.core.Single;
 
 @Dao
 public abstract class WeatherDao {
@@ -27,7 +26,7 @@ public abstract class WeatherDao {
     abstract Current getCurrentSingleData();
 
     @Query("SELECT * FROM forecastTable")
-    abstract List<Forecast> getForecastData();
+    public abstract List<Forecast> getForecastData();
 
     @Query("DELETE FROM locationTable")
     abstract void deleteLocationData();
@@ -46,25 +45,32 @@ public abstract class WeatherDao {
     }
 
     @Transaction
-    public UpdatedWeatherData getCurrentWeatherData(String query){
+    public WeatherData getCurrentWeatherData(String query){
         Location location = getLocationData(query);
         Current current = this.getCurrentSingleData();
         List<Forecast> forecasts = getForecastData();
-
-        return new UpdatedWeatherData(location, current, forecasts.get(0));
+        return new WeatherData(location, current, forecasts.get(0));
     }
 
     @Transaction
-    public UpdatedWeatherData getTomorrowWeatherData(String query){
+    public WeatherData getTomorrowWeatherData(String query){
         Location location = getLocationData(query);
         List<Forecast> forecasts = getForecastData();
         List<Forecastday> forecastDayList = forecasts.get(0).getForecastday();
-//        if(!forecastDayList.isEmpty()){
-//
-//        }
-
         return new Util().getCurrentWeatherFromForecast(forecastDayList.get(1), location);
+    }
 
+    @Transaction
+    public List<Forecastday> getListForecast(){
+        List<Forecast> forecastList = getForecastData();
+        List<Forecastday> forecastDayList = new ArrayList<>();
+        if(!forecastList.isEmpty()){
+            for(int i = 0; i<forecastList.size(); i++){
+                forecastDayList.addAll(forecastList.get(i).getForecastday());
+            }
+        }
+
+        return forecastDayList;
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

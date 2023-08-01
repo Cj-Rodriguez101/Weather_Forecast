@@ -1,9 +1,12 @@
-package com.cjrodriguez.weatherforecast;
+package com.cjrodriguez.weatherforecast.ui.activities;
 
 import static com.cjrodriguez.weatherforecast.util.Constants.CURRENT_COUNTRY;
 import static com.cjrodriguez.weatherforecast.util.Constants.TRANSFER_CITY;
 import static com.cjrodriguez.weatherforecast.util.Constants.WEATHER_REQUEST_CODE;
+import static com.cjrodriguez.weatherforecast.util.Constants.WEATHER_TAG;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -11,6 +14,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,15 +25,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.cjrodriguez.weatherforecast.BaseApplication;
+import com.cjrodriguez.weatherforecast.R;
 import com.cjrodriguez.weatherforecast.databinding.ActivityMainBinding;
-import com.cjrodriguez.weatherforecast.fragments.FutureWeatherListFragment;
-import com.cjrodriguez.weatherforecast.fragments.TodayWeatherFragment;
-import com.cjrodriguez.weatherforecast.fragments.TomorrowWeatherFragment;
 import com.cjrodriguez.weatherforecast.mvp.Contract;
+import com.cjrodriguez.weatherforecast.mvp.model.WeatherModel;
 import com.cjrodriguez.weatherforecast.mvp.presenters.MainActivityPresenter;
-import com.cjrodriguez.weatherforecast.mvp.WeatherModel;
 import com.cjrodriguez.weatherforecast.repository.WeatherRepository;
-import com.cjrodriguez.weatherforecast.util.BaseFragment;
+import com.cjrodriguez.weatherforecast.ui.fragments.BaseFragment;
+import com.cjrodriguez.weatherforecast.ui.fragments.FutureWeatherListFragment;
+import com.cjrodriguez.weatherforecast.ui.fragments.TodayWeatherFragment;
+import com.cjrodriguez.weatherforecast.ui.fragments.TomorrowWeatherFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
@@ -47,10 +53,7 @@ import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements Contract.View {
 
-    //private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-
     private FusedLocationProviderClient fusedLocationProviderClient;
-    //private SettingsDatastore datastore;
 
     private DemoCollectionAdapter demoCollectionAdapter;
     Contract.Presenter presenter;
@@ -58,28 +61,24 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     private LocationCallback locationCallback;
     private android.location.Location currentLocation;
 
-    //private String currentCountryName;
     private String cityName;
     ActivityMainBinding binding;
-    //private final RetrofitService ln = RetrofitServiceImpl.getInstance();
-//    @Inject
-//    RetrofitService retrofitService;
-//
-//    @Inject
-//    WeatherDao weatherDao;
-
     @Inject
     WeatherRepository weatherRepository;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
         ((BaseApplication) getApplicationContext()).appComponent.inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         presenter = new MainActivityPresenter(this,
                 new WeatherModel(weatherRepository));
         cityName = presenter.readSelectedCountry();
         binding.currentLocation.setText(cityName);
+
+        Context context = getApplicationContext();
 
         if (demoCollectionAdapter == null) {
             demoCollectionAdapter = new DemoCollectionAdapter(getSupportFragmentManager(), getLifecycle());
@@ -94,22 +93,22 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
         new TabLayoutMediator(binding.tabs, binding.fragContainer, (tab, position) ->
         {
-            switch (position){
+            switch (position) {
                 case 0:
-                    tab.setText("Today");
+                    tab.setText(context.getString(R.string.today));
                     break;
                 case 1:
-                    tab.setText("Tomorrow");
+                    tab.setText(context.getString(R.string.tomorrow));
                     break;
                 default:
-                    tab.setText("Future");
+                    tab.setText(context.getString(R.string.future));
                     break;
             }
         }).attach();
 
         boolean isLocationGranted = checkIfLocationPermissionGranted();
         if (isLocationGranted) {
-            if(cityName == null || cityName.isEmpty()){
+            if (cityName == null || cityName.isEmpty()) {
                 getCurrentLocation();
             }
         } else {
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
             startActivity(intent);
         });
 
-        binding.fragContainer.setUserInputEnabled(false);
+        //binding.fragContainer.setUserInputEnabled(false);
     }
 
     private boolean checkIfLocationPermissionGranted() {
@@ -141,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     private void getCurrentLocation() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        //locationRequest = LocationRequest.create();
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY,
                 600000L).build();
         locationCallback = new LocationCallback() {
@@ -162,27 +160,16 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
                                         currentLocation.getLongitude(), 1);
 
                         if (address.size() > 0) {
-                            //Log.e("yh", address.get(0).getCountryName());
                             String name = address.get(0).getLocality();
-                            if(cityName.isEmpty()){
+                            if (cityName.isEmpty()) {
                                 presenter.writeSelectedCountry(name);
+                                presenter.writeLocationCountry(name);
                                 binding.currentLocation.setText(name);
                                 presenter.updateWeatherCache(name);
                             }
-                            //binding.currentLocation.setText(currentCountryName);
-                            //presenter.writeSelectedCountry(currentCountryName);
-
-                            //changed here
-//                            if(!Objects.equals(presenter.readSelectedCountry(), currentCountryName)){
-//                                presenter.updateWeatherCache(currentCountryName);
-//                            }
-//                            if(!Objects.equals(presenter.readSelectedCountry(), currentCountryName)){
-//                                presenter.updateWeatherCache(currentCountryName);
-//                            }
-
                         }
                     } catch (IOException e) {
-                        Log.e("exec", e.getMessage());
+                        Log.e(WEATHER_TAG, e.getMessage());
                         //throw new RuntimeException(e);
                     }
                 }
@@ -196,30 +183,27 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
                 android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback,
+                Looper.myLooper());
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case WEATHER_REQUEST_CODE:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getCurrentLocation();
-                }  else {
-                    finish();
-                }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == WEATHER_REQUEST_CODE) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
+            } else {
+                finish();
+            }
         }
-        // Other 'case' lines to check for other
-        // permissions this app might request.
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     protected void onStop() {
-        //compositeDisposable.clear();
-        if(fusedLocationProviderClient != null){
+        if (fusedLocationProviderClient != null) {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Log.d("TAG", "Location Callback removed.");
@@ -235,21 +219,38 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         String country = intent.getStringExtra(TRANSFER_CITY);
-        if(country != null){
+        if (country != null) {
             presenter.writeSelectedCountry(country);
             presenter.updateWeatherCache(country);
         }
     }
 
     @Override
-    public void showProgress() {}
+    public void showProgress() {
+        binding.setShouldShowProgress(true);
+    }
 
     @Override
-    public void hideProgress() {}
+    public void hideProgress() {
+        binding.setShouldShowProgress(false);
+    }
 
     @Override
     public void setCurrentLocation(String city) {
         binding.currentLocation.setText(city);
+    }
+
+    @Override
+    public void showErrorLayout(String message) {
+        binding.errorText.setText(message);
+        binding.fragContainer.setVisibility(View.GONE);
+        binding.errorLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideErrorLayout() {
+        binding.errorLayout.setVisibility(View.GONE);
+        binding.fragContainer.setVisibility(View.VISIBLE);
     }
 
     class DemoCollectionAdapter extends FragmentStateAdapter {
@@ -261,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            String selectedCity = presenter.readSelectedCountry();//datastore.readSelectedCity();
+            String selectedCity = presenter.readSelectedCountry();
             switch (position) {
                 case 0:
                     return TodayWeatherFragment.newInstance(selectedCity);
@@ -280,6 +281,9 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
 
     @Override
     protected void onDestroy() {
+        binding = null;
+        fusedLocationProviderClient = null;
+        locationRequest = null;
         super.onDestroy();
     }
 
@@ -287,10 +291,10 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     public void updateFragments() {
         binding.currentLocation.setText(cityName);
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        if(!fragments.isEmpty()){
-            for (int i = 0; i<fragments.size(); i++){
+        if (!fragments.isEmpty()) {
+            for (int i = 0; i < fragments.size(); i++) {
                 Fragment fragment = fragments.get(i);
-                if(fragment instanceof BaseFragment){
+                if (fragment instanceof BaseFragment) {
                     ((BaseFragment) fragment).updateScreen();
                 }
             }

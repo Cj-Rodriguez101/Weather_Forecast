@@ -2,10 +2,8 @@ package com.cjrodriguez.weatherforecast.mvp.presenters;
 
 import android.util.Log;
 
-import com.cjrodriguez.weatherforecast.model.UpdatedWeatherData;
+import com.cjrodriguez.weatherforecast.model.WeatherData;
 import com.cjrodriguez.weatherforecast.mvp.Contract;
-
-import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -29,15 +27,15 @@ public class TodayWeatherFragmentPresenter implements Contract.Presenter {
     public void loadAllWeatherData(String location) {
         mainView.showProgress();
 
-        compositeDisposable.add(model.getCurrentWeatherData(location, true).subscribeOn(Schedulers.io())
+        compositeDisposable.add(model.getCurrentWeatherData(location, true)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<UpdatedWeatherData>() {
+                .subscribeWith(new DisposableSingleObserver<WeatherData>() {
                     @Override
-                    public void onSuccess(@NonNull UpdatedWeatherData updatedWeatherData) {
-                        if (updatedWeatherData.getForecast().getForecastday().size() > 0) {
-                            //Log.e("sictoday", updatedWeatherData.getCurrent().getCondition().getIcon());
-                            mainView.setUpdatedWeatherData(updatedWeatherData);
-                            mainView.setLineTodayChartData(updatedWeatherData);
+                    public void onSuccess(@NonNull WeatherData weatherData) {
+                        if (weatherData.getForecast().getForecastday().size() > 0) {
+                            mainView.setUpdatedWeatherData(weatherData);
+                            mainView.setLineTodayChartData(weatherData);
                         }
                     }
 

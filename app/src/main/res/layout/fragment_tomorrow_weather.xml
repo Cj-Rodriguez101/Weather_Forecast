@@ -7,7 +7,7 @@
     <data>
         <variable
             name="tomorrowWeather"
-            type="com.cjrodriguez.weatherforecast.model.UpdatedWeatherData" />
+            type="com.cjrodriguez.weatherforecast.model.WeatherData" />
 
         <variable
             name="tomorrowDay"
@@ -17,12 +17,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.TodayWeatherFragment">
+        tools:context=".ui.fragments.TomorrowWeatherFragment">
 
         <TextView
             android:id="@+id/date_time"
             android:layout_width="match_parent"
-            android:text="@{tomorrowWeather.current.last_updated}"
+            app:tomorrowDateTime="@{tomorrowWeather.current.last_updated_epoch}"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:textAlignment="textStart"
@@ -58,6 +58,17 @@
             app:layout_constraintTop_toBottomOf="@id/day_night" />
 
         <TextView
+            android:id="@+id/temp_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/c"
+            android:textAlignment="textStart"
+            android:textSize="50sp"
+            app:layout_constraintStart_toEndOf="@id/degree_circle"
+            app:layout_constraintTop_toBottomOf="@id/day_night" />
+
+        <TextView
             android:id="@+id/degree_circle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -83,9 +94,11 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_margin="16dp"
+            android:contentDescription="@string/weather_icon"
             android:scaleType="centerCrop"
             app:image="@{tomorrowWeather.current.condition.icon}"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/weather_desc"
+            app:layout_constraintStart_toStartOf="@+id/weather_desc"
             app:layout_constraintTop_toBottomOf="@id/day_night" />
 
         <TextView
@@ -100,7 +113,7 @@
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/temp"
-            android:text="Feels Like" />
+            android:text="@string/feels_like" />
 
         <TextView
             android:id="@+id/feels_like_cel"
@@ -143,18 +156,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/chance_linear">
 
-
-
-            <!--            <TextView-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:textSize="100sp"-->
-            <!--                android:textAlignment="center"-->
-            <!--                android:layout_gravity="center"-->
-            <!--                android:text="hello world"/>-->
-
-
-
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/line_chart"
                 android:layout_width="wrap_content"
@@ -174,20 +175,22 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/weather_icon"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_height="30dp"
                 android:src="@drawable/umbrella"
-                app:tint="@color/mtrl_filled_stroke_color" />
+                app:tint="@drawable/custom_color"
+                tools:ignore="PrivateResource" />
 
             <TextView
                 android:id="@+id/chance_rain"
                 app:chance="@{tomorrowDay.daily_chance_of_rain}"
                 android:layout_width="wrap_content"
-                android:textColor="@color/mtrl_filled_stroke_color"
                 tools:text="chance of rain"
                 android:layout_gravity="center"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                tools:ignore="PrivateResource" />
 
         </LinearLayout>
 

@@ -7,22 +7,27 @@
     <data>
         <variable
             name="currentWeather"
-            type="com.cjrodriguez.weatherforecast.model.UpdatedWeatherData" />
+            type="com.cjrodriguez.weatherforecast.model.WeatherData" />
 
         <variable
             name="currentDay"
             type="com.cjrodriguez.weatherforecast.model.Day" />
+
+        <variable
+            name="isCurrentLocationSelected"
+            type="boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.TodayWeatherFragment">
+        tools:context=".ui.fragments.TodayWeatherFragment">
 
         <TextView
             android:id="@+id/date_time"
             android:layout_width="match_parent"
-            android:text="@{currentWeather.current.last_updated}"
+            app:currentDateTime="@{currentWeather.current.last_updated_epoch}"
+            app:isLocationSelected="@{isCurrentLocationSelected}"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:textAlignment="textStart"
@@ -69,6 +74,17 @@
             app:layout_constraintTop_toBottomOf="@id/day_night" />
 
         <TextView
+            android:id="@+id/temp_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/c"
+            android:textAlignment="textStart"
+            android:textSize="50sp"
+            app:layout_constraintStart_toEndOf="@id/degree_circle"
+            app:layout_constraintTop_toBottomOf="@id/day_night" />
+
+        <TextView
             android:id="@+id/degree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -83,9 +99,12 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_margin="16dp"
+            android:contentDescription="@string/weather_icon"
             android:scaleType="centerCrop"
             app:image="@{currentWeather.current.condition.icon}"
-            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintEnd_toEndOf="@+id/weather_desc"
+            app:layout_constraintStart_toStartOf="@+id/weather_desc"
             app:layout_constraintTop_toBottomOf="@id/day_night" />
 
         <TextView
@@ -99,7 +118,7 @@
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/temp"
-            android:text="Feels Like" />
+            android:text="@string/feels_like" />
 
         <TextView
             android:id="@+id/feels_like_cel"
@@ -117,9 +136,9 @@
 
         <TextView
             android:id="@+id/weather_desc"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:textAlignment="textStart"
+            android:textAlignment="center"
             android:layout_marginEnd="16dp"
             android:text="@{currentWeather.current.condition.text}"
             android:textSize="16sp"
@@ -140,18 +159,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/chance_linear">
-
-
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:textSize="100sp"-->
-<!--                android:textAlignment="center"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:text="hello world"/>-->
-
-
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/line_chart"
@@ -174,18 +181,20 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:contentDescription="@string/weather_icon"
                 android:layout_height="30dp"
                 android:src="@drawable/umbrella"
-                app:tint="@color/mtrl_filled_stroke_color" />
+                app:tint="@drawable/custom_color"
+                tools:ignore="PrivateResource" />
 
             <TextView
                 android:id="@+id/chance_rain"
                 app:chance="@{currentDay.daily_chance_of_rain}"
                 android:layout_width="wrap_content"
-                android:textColor="@color/mtrl_filled_stroke_color"
                 tools:text="chance of rain"
                 android:layout_gravity="center"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                tools:ignore="PrivateResource" />
 
         </LinearLayout>
 

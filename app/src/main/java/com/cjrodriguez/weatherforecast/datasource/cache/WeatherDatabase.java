@@ -4,7 +4,7 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.cjrodriguez.weatherforecast.converter.Converters;
+import com.cjrodriguez.weatherforecast.datasource.cache.converter.Converters;
 import com.cjrodriguez.weatherforecast.model.Current;
 import com.cjrodriguez.weatherforecast.model.Forecast;
 import com.cjrodriguez.weatherforecast.model.Location;

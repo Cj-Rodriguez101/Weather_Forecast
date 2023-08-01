@@ -1,5 +1,7 @@
 package com.cjrodriguez.weatherforecast.model;
 
+import static com.cjrodriguez.weatherforecast.util.Constants.CURRENT_LOCATION_STRING;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -12,17 +14,29 @@ public class Location {
     private String country;
     private double lat;
     private double lon;
+
+    private int localtime_epoch;
     private String url;
 
     public Location (String country){
         this.id = 1;
-        this.name = country+" (Current Location)";
+        this.name = country+" "+CURRENT_LOCATION_STRING;
         this.region = country;
         this.country = country;
         this.lat = 98.875;
         this.lon = 98.34555;
+        this.localtime_epoch = 0;
         this.url = "random";
     }
+
+    public int getLocaltime_epoch() {
+        return localtime_epoch;
+    }
+
+    public void setLocaltime_epoch(int localtime_epoch) {
+        this.localtime_epoch = localtime_epoch;
+    }
+
     public int getId() {
         return id;
     }

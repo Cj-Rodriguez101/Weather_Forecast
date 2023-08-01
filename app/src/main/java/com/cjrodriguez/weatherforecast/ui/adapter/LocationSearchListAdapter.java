@@ -1,14 +1,12 @@
-package com.cjrodriguez.weatherforecast;
+package com.cjrodriguez.weatherforecast.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
 
-import com.cjrodriguez.weatherforecast.databinding.ListItemBinding;
+import com.cjrodriguez.weatherforecast.databinding.ListItemLvBinding;
 import com.cjrodriguez.weatherforecast.model.Location;
 
 import java.util.List;
@@ -19,7 +17,7 @@ public class LocationSearchListAdapter extends BaseAdapter {
     private final OnItemClickListener listeners;
     private LayoutInflater mLayoutInflater;
 
-    LocationSearchListAdapter(List<Location> demoModels, OnItemClickListener listener) {
+    public LocationSearchListAdapter(List<Location> demoModels, OnItemClickListener listener) {
         locations = demoModels;
         listeners = listener;
     }
@@ -41,19 +39,19 @@ public class LocationSearchListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View view, final ViewGroup viewGroup) {
         View result = view;
-        ListItemBinding binding;
+        ListItemLvBinding binding;
         if (result == null) {
             if (mLayoutInflater == null) {
                 mLayoutInflater = (LayoutInflater) viewGroup.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             }
-            binding = ListItemBinding.inflate(
+            binding = ListItemLvBinding.inflate(
                     mLayoutInflater, viewGroup, false);
             result = binding.getRoot();
             result.setTag(binding);
         }
         else {
-            binding = (ListItemBinding) result.getTag();
+            binding = (ListItemLvBinding) result.getTag();
         }
         result.setOnClickListener(v -> listeners.onItemClick((Location) getItem(position)));
         //result.setOnClickListener(listeners);

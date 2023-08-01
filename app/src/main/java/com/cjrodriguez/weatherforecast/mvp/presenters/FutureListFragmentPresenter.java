@@ -2,8 +2,10 @@ package com.cjrodriguez.weatherforecast.mvp.presenters;
 
 import android.util.Log;
 
-import com.cjrodriguez.weatherforecast.model.WeatherData;
+import com.cjrodriguez.weatherforecast.model.Forecastday;
 import com.cjrodriguez.weatherforecast.mvp.Contract;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -11,14 +13,14 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.observers.DisposableSingleObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class TomorrowWeatherFragmentPresenter implements Contract.Presenter {
+public class FutureListFragmentPresenter implements Contract.Presenter {
 
     private final Contract.View mainView;
     private final Contract.Model model;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public TomorrowWeatherFragmentPresenter(Contract.View mainView, Contract.Model model) {
+    public FutureListFragmentPresenter(Contract.View mainView, Contract.Model model) {
         this.mainView = mainView;
         this.model = model;
     }
@@ -27,15 +29,12 @@ public class TomorrowWeatherFragmentPresenter implements Contract.Presenter {
     public void loadAllWeatherData(String location) {
         mainView.showProgress();
 
-        compositeDisposable.add(model.getCurrentWeatherData(location, false).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<WeatherData>() {
+        compositeDisposable.add(model.getForecasts().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSingleObserver<List<Forecastday>>(){
+
                     @Override
-                    public void onSuccess(@NonNull WeatherData weatherData) {
-                        if (weatherData.getForecast().getForecastday().size() > 0) {
-                            mainView.setUpdatedWeatherData(weatherData);
-                            mainView.setLineTodayChartData(weatherData);
-                        }
+                    public void onSuccess(@NonNull List<Forecastday> forecastList) {
+                        mainView.setFutureListData(forecastList);
                     }
 
                     @Override

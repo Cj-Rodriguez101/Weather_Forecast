@@ -7,4 +7,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="o">o</string>
+    <string name="weather_icon">Weather Icon</string>
+    <string name="feels_like">Feels Like</string>
+    <string name="wind">Wind</string>
+    <string name="humidity">Humidity</string>
+    <string name="chance_of_rain">Chance Of Rain</string>
+    <string name="sunrise_sunset">Sunrise/Sunset</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="future">Future</string>
+    <string name="c">C</string>
+    <string name="error">Error</string>
 </resources>

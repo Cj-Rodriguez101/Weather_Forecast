@@ -2,10 +2,8 @@ package com.cjrodriguez.weatherforecast.mvp.presenters;
 
 import android.util.Log;
 
-import com.cjrodriguez.weatherforecast.model.UpdatedWeatherData;
+import com.cjrodriguez.weatherforecast.model.WeatherData;
 import com.cjrodriguez.weatherforecast.mvp.Contract;
-
-import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -25,57 +23,35 @@ public class MainActivityPresenter implements Contract.Presenter {
     }
 
     @Override
-    public void loadAllWeatherData(String location) {
-        //Log.e("ooo", "eer");
-//        mainView.showProgress();
-//        compositeDisposable.add(model.getCurrentWeatherData(location).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeWith(new DisposableSingleObserver<UpdatedWeatherData>() {
-//
-//                    @Override
-//                    public void onSuccess(@NonNull UpdatedWeatherData updatedWeatherData) {
-//                        //mainView.setCurrentTemperature(String.valueOf(updatedWeatherData.getCurrent().getTemp_c()));
-//                        //Log.e("success", "success"+ updatedWeatherData.getCurrent().getTemp_c());
-//                    }
-//
-//                    @Override
-//                    public void onError(@NonNull Throwable e) {
-//                        Log.e("error", e.getMessage());
-//                        //mainView.setCurrentTemperature("0.0");
-//                    }
-//                }));
-//
-//        mainView.hideProgress();
-    }
-
-    @Override
     public void updateWeatherCache(String location) {
         mainView.showProgress();
         compositeDisposable.add(model.updateWeatherCache(location).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<UpdatedWeatherData>() {
+                .subscribeWith(new DisposableSingleObserver<WeatherData>() {
                     @Override
-                    public void onSuccess(@NonNull UpdatedWeatherData updatedWeatherData) {
+                    public void onSuccess(@NonNull WeatherData weatherData) {
 
+                        if(location.isEmpty()){
+                            mainView.showErrorLayout("No Location Selected");
+                        } else {
+                            mainView.hideErrorLayout();
+                        }
                         mainView.updateFragments();
                         mainView.setCurrentLocation(location);
-
-//                        if (updatedWeatherData.getForecast().getForecastday().size() > 0) {
-//                            model.clearAllWeatherData();
-//                            model.insertUpdateWeatherData(updatedWeatherData.getLocation(),
-//                                    updatedWeatherData.getCurrent(),
-//                                    List.of(updatedWeatherData.getForecast()));
-//                        }
-//                        Log.e("sic", "heher");
+                        mainView.hideProgress();
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e("error", e.getMessage());
+                        mainView.hideProgress();
+                        mainView.showErrorLayout("Make Sure Internet Is Connected");
+                        Log.e("error", e.getMessage()); //Crashlytics for prod
                     }
+
+
                 }));
         //model.updateWeatherCache(location);
-        mainView.hideProgress();
+//        mainView.hideProgress();
     }
 
     @Override
@@ -84,8 +60,18 @@ public class MainActivityPresenter implements Contract.Presenter {
     }
 
     @Override
+    public void writeLocationCountry(String country) {
+        model.writeLocationCountry(country);
+    }
+
+    @Override
     public String readSelectedCountry() {
         return model.readSelectedCountry();
+    }
+
+    @Override
+    public String readLocationCountry() {
+        return model.readLocationCountry();
     }
 
     @Override

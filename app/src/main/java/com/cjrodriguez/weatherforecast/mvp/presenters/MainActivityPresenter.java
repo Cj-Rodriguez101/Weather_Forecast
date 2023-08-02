@@ -1,5 +1,7 @@
 package com.cjrodriguez.weatherforecast.mvp.presenters;
 
+import static com.cjrodriguez.weatherforecast.util.Constants.WEATHER_TAG;
+
 import android.util.Log;
 
 import com.cjrodriguez.weatherforecast.model.WeatherData;
@@ -45,13 +47,11 @@ public class MainActivityPresenter implements Contract.Presenter {
                     public void onError(@NonNull Throwable e) {
                         mainView.hideProgress();
                         mainView.showErrorLayout("Make Sure Internet Is Connected");
-                        Log.e("error", e.getMessage()); //Crashlytics for prod
+                        Log.e(WEATHER_TAG, e.getMessage()); //Crashlytics for prod
                     }
 
 
                 }));
-        //model.updateWeatherCache(location);
-//        mainView.hideProgress();
     }
 
     @Override

@@ -4,7 +4,6 @@ import static com.cjrodriguez.weatherforecast.util.Constants.CURRENT_COUNTRY;
 import static com.cjrodriguez.weatherforecast.util.Constants.TRANSFER_CITY;
 import static com.cjrodriguez.weatherforecast.util.Constants.WEATHER_REQUEST_CODE;
 import static com.cjrodriguez.weatherforecast.util.Constants.WEATHER_TAG;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -25,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-
 import com.cjrodriguez.weatherforecast.BaseApplication;
 import com.cjrodriguez.weatherforecast.R;
 import com.cjrodriguez.weatherforecast.databinding.ActivityMainBinding;
@@ -38,20 +35,18 @@ import com.cjrodriguez.weatherforecast.ui.fragments.FutureWeatherListFragment;
 import com.cjrodriguez.weatherforecast.ui.fragments.TodayWeatherFragment;
 import com.cjrodriguez.weatherforecast.ui.fragments.TomorrowWeatherFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.material.tabs.TabLayoutMediator;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
 
+@SuppressLint("MissingPermission")
 public class MainActivity extends AppCompatActivity implements Contract.View {
 
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -82,7 +77,8 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         Context context = getApplicationContext();
 
         if (demoCollectionAdapter == null) {
-            demoCollectionAdapter = new DemoCollectionAdapter(getSupportFragmentManager(), getLifecycle());
+            demoCollectionAdapter = new DemoCollectionAdapter(getSupportFragmentManager(),
+                    getLifecycle());
         }
 
         binding.fragContainer.setAdapter(demoCollectionAdapter);
@@ -128,77 +124,6 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         });
     }
 
-    private boolean checkIfLocationPermissionGranted() {
-        return ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void getCurrentLocation() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY,
-                600000L).build();
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationAvailability(@androidx.annotation.NonNull LocationAvailability locationAvailability) {
-                super.onLocationAvailability(locationAvailability);
-            }
-
-            @Override
-            public void onLocationResult(@androidx.annotation.NonNull LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                currentLocation = locationResult.getLastLocation();
-                if (currentLocation != null) {
-                    Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-                    try {
-                        List<Address> address =
-                                geocoder.getFromLocation(currentLocation.getLatitude(),
-                                        currentLocation.getLongitude(), 1);
-
-                        if (address.size() > 0) {
-                            String name = address.get(0).getLocality();
-                            if (cityName.isEmpty()) {
-                                presenter.writeSelectedCountry(name);
-                                presenter.writeLocationCountry(name);
-                                binding.currentLocation.setText(name);
-                                presenter.updateWeatherCache(name);
-                            }
-                        }
-                    } catch (IOException e) {
-                        Log.e(WEATHER_TAG, e.getMessage());
-                    }
-                }
-            }
-        };
-
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback,
-                Looper.myLooper());
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == WEATHER_REQUEST_CODE) {
-            if (grantResults.length > 0 &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
-            } else {
-                finish();
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
     @Override
     protected void onStop() {
         if (fusedLocationProviderClient != null) {
@@ -231,6 +156,89 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
     @Override
     public void hideProgress() {
         binding.setShouldShowProgress(false);
+    }
+
+    private boolean checkIfLocationPermissionGranted() {
+        return ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void getCurrentLocation() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY,
+                600000L).build();
+        locationCallback = new LocationCallback() {
+
+            @Override
+            public void onLocationResult(@androidx.annotation.NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                currentLocation = locationResult.getLastLocation();
+                if (currentLocation != null) {
+                    Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                    try {
+                        List<Address> address =
+                                geocoder.getFromLocation(currentLocation.getLatitude(),
+                                        currentLocation.getLongitude(), 1);
+
+                        if (address.size() > 0) {
+                            String name = address.get(0).getLocality();
+                            if (cityName.isEmpty()) {
+                                presenter.writeSelectedCountry(name);
+                                presenter.writeLocationCountry(name);
+                                binding.currentLocation.setText(name);
+                                presenter.updateWeatherCache(name);
+                            }
+                        }
+                    } catch (IOException e) {
+                        Log.e(WEATHER_TAG, e.getMessage());
+                    }
+                }
+            }
+        };
+
+        boolean isLocationGranted = checkIfLocationPermissionGranted();
+        if (isLocationGranted) {
+            try {
+                fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback,
+                        Looper.myLooper());
+            }catch (Exception ex){
+                Log.e(WEATHER_TAG, "SecurityException is "+ex.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != WEATHER_REQUEST_CODE) return;
+
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getCurrentLocation();
+        }
+
+        if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            finish();
+        }
+
+    }
+
+    @Override
+    public void updateFragments() {
+        binding.currentLocation.setText(cityName);
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (!fragments.isEmpty()) {
+            for (int i = 0; i < fragments.size(); i++) {
+                Fragment fragment = fragments.get(i);
+                if (fragment instanceof BaseFragment) {
+                    ((BaseFragment) fragment).updateScreen();
+                }
+            }
+        }
     }
 
     @Override
@@ -283,19 +291,5 @@ public class MainActivity extends AppCompatActivity implements Contract.View {
         fusedLocationProviderClient = null;
         locationRequest = null;
         super.onDestroy();
-    }
-
-    @Override
-    public void updateFragments() {
-        binding.currentLocation.setText(cityName);
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        if (!fragments.isEmpty()) {
-            for (int i = 0; i < fragments.size(); i++) {
-                Fragment fragment = fragments.get(i);
-                if (fragment instanceof BaseFragment) {
-                    ((BaseFragment) fragment).updateScreen();
-                }
-            }
-        }
     }
 }

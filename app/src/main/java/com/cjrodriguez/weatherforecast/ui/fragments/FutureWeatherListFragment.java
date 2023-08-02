@@ -50,7 +50,7 @@ public class FutureWeatherListFragment extends BaseFragment implements Contract.
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        ((BaseApplication) getActivity().getApplicationContext()).appComponent.inject(this);
+        ((BaseApplication) requireActivity().getApplicationContext()).appComponent.inject(this);
     }
 
     @Override
@@ -87,15 +87,5 @@ public class FutureWeatherListFragment extends BaseFragment implements Contract.
         binding = null;
         adapter = null;
         super.onDestroyView();
-    }
-
-    @Override
-    public void showProgress() {
-
-    }
-
-    @Override
-    public void hideProgress() {
-
     }
 }

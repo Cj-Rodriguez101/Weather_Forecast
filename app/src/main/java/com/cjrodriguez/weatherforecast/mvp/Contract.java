@@ -10,8 +10,8 @@ import io.reactivex.rxjava3.core.Single;
 
 public interface Contract {
     interface View{
-        void showProgress();
-        void hideProgress();
+        default void showProgress(){}
+        default void hideProgress(){}
 
         default String getDefaultLocation(){return "";}
         default void setUpdatedWeatherData(WeatherData weatherData){}
